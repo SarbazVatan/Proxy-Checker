@@ -32,12 +32,12 @@ def check_proxy(input_queue):
             req = urllib2.Request("http://www.google.com")
             sock = urllib2.urlopen(req, timeout=7)
             rs = sock.read(1000)
-            if '<title>Google</title>' in rs:
-				print '[OK]', prx
-				input_queue.task_done()
-				kl = open('result.txt', 'a')
-				kl.write(str(prx))
-				kl.close()
+    	if '<title>Google</title>' in rs:
+		print '[OK]', prx
+		input_queue.task_done()
+		kl = open('result.txt', 'a')
+		kl.write(str(prx))
+		kl.close()
         except urllib2.HTTPError, e:
             input_queue.task_done()
 
