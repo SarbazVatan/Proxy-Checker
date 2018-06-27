@@ -22,28 +22,28 @@ thread = int(raw_input("\n[#]Thread: "))
 
 
 def check_proxy(input_queue):
-    while 1:
-        prx = input_queue.get()
-        try:
-            proxy_handler = urllib2.ProxyHandler({'http': prx})
-            opener = urllib2.build_opener(proxy_handler)
-            opener.addheaders = [('User-agent', 'Mozilla/5.0')]
-            urllib2.install_opener(opener)
-            req = urllib2.Request("http://www.google.com")
-            sock = urllib2.urlopen(req, timeout=7)
-            rs = sock.read(1000)
-    	if '<title>Google</title>' in rs:
-		print '[OK]', prx
-		input_queue.task_done()
-		kl = open('result.txt', 'a')
-		kl.write(str(prx))
-		kl.close()
-        except urllib2.HTTPError, e:
-            input_queue.task_done()
+	while 1:
+		prx = input_queue.get()
+		try:
+			proxy_handler = urllib2.ProxyHandler({'http': prx})
+			opener = urllib2.build_opener(proxy_handler)
+			opener.addheaders = [('User-agent', 'Mozilla/5.0')]
+			urllib2.install_opener(opener)
+			req = urllib2.Request("http://www.google.com")
+			sock = urllib2.urlopen(req, timeout=7)
+			rs = sock.read(1000)
+			if '<title>Google</title>' in rs:
+				print '[OK]', prx
+				input_queue.task_done()
+				kl = open('result.txt', 'a')
+				kl.write(str(prx))
+				kl.close()
+		except urllib2.HTTPError, e:
+			input_queue.task_done()
 
-        except Exception, detail:
-            print '[-]', prx
-            input_queue.task_done()
+		except Exception, detail:
+			print '[-]', prx
+			input_queue.task_done()
 
 def run_thread():
     global input_queue
